@@ -4,6 +4,7 @@ NS_ASSUME_NONNULL_BEGIN
 typedef NS_ENUM(NSUInteger, WMFUserActivityType) {
     WMFUserActivityTypeExplore,
     WMFUserActivityTypePlaces,
+    WMFUserActivityTypePlacesWithLocation,
     WMFUserActivityTypeSavedPages,
     WMFUserActivityTypeHistory,
     WMFUserActivityTypeSearch,

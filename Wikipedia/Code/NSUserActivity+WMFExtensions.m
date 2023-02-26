@@ -74,6 +74,22 @@ __attribute__((annotate("returns_localized_nsstring"))) static inline NSString *
     return activity;
 }
 
++ (instancetype)wmf_placesActivityWithLocationURL:(NSURL *)activityURL {
+    NSURLComponents *components = [NSURLComponents componentsWithURL:activityURL resolvingAgainstBaseURL:NO];
+    NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] init];
+    for (NSURLQueryItem *item in components.queryItems) {
+        if ([item.name isEqualToString:@"lat"]) {
+            [userInfo setObject: item.value forKey:@"lat"];
+        }
+        if ([item.name isEqualToString:@"long"]) {
+            [userInfo setObject: item.value forKey:@"long"];
+        }
+    }
+    NSUserActivity *activity = [self wmf_pageActivityWithName:@"Places"];
+    activity.userInfo = userInfo;
+    return activity;
+}
+
 + (instancetype)wmf_exploreViewActivity {
     NSUserActivity *activity = [self wmf_pageActivityWithName:@"Explore"];
     return activity;
@@ -124,6 +140,9 @@ __attribute__((annotate("returns_localized_nsstring"))) static inline NSString *
     } else if ([url.host isEqualToString:@"explore"]) {
         return [self wmf_exploreViewActivity];
     } else if ([url.host isEqualToString:@"places"]) {
+        if ([[url absoluteString] containsString:@"lat"] && [[url absoluteString] containsString:@"long"]) {
+            return [self wmf_placesActivityWithLocationURL:url];
+        }
         return [self wmf_placesActivityWithURL:url];
     } else if ([url.host isEqualToString:@"saved"]) {
         return [self wmf_savedPagesViewActivity];
@@ -226,7 +245,11 @@ __attribute__((annotate("returns_localized_nsstring"))) static inline NSString *
         } else {
             return WMFUserActivityTypeSettings;
         }
-    } else if ([self wmf_contentURL]) {
+    }
+    else if ([self wmf_locationInfo]) {
+        return WMFUserActivityTypePlacesWithLocation;
+    }
+    else if ([self wmf_contentURL]) {
         return WMFUserActivityTypeContent;
     } else if ([self.activityType isEqualToString:CSQueryContinuationActionType]) {
         return WMFUserActivityTypeSearchResults;
@@ -262,6 +285,10 @@ __attribute__((annotate("returns_localized_nsstring"))) static inline NSString *
     } else {
         return self.webpageURL;
     }
+}
+
+- (NSDictionary *)wmf_locationInfo {
+    return self.userInfo;
 }
 
 - (NSURL *)wmf_contentURL {
