@@ -1948,7 +1948,30 @@ class PlacesViewController: ViewController, UISearchBarDelegate, ArticlePopoverV
         let searchResult = MWKSearchResult(articleID: 0, revID: 0, title: title, displayTitle: displayTitle, displayTitleHTML: displayTitleHTML, wikidataDescription: article.wikidataDescription, extract: article.snippet, thumbnailURL: article.thumbnailURL, index: nil, titleNamespace: nil, location: article.location)
         currentSearch = PlaceSearch(filter: .top, type: .location, origin: .user, sortStyle: .links, string: nil, region: region, localizedDescription: title, searchResult: searchResult, siteURL: articleURL.wmf_site)
     }
-    
+
+    @objc public func showLocation(_ locationInfo: [String: Any]) {
+        guard let latStr = locationInfo["lat"] as? String, let longStr = locationInfo["long"] as? String, let lat = Double(latStr), let long = Double(longStr)
+        else {
+            return
+        }
+
+        let coordinate = CLLocationCoordinate2DMake(lat, long)
+
+        // create region with 10km diameter
+        let region = MKCoordinateRegion(center: coordinate, latitudinalMeters: 5000, longitudinalMeters: 5000)
+
+        // set region to mapView
+        self.mapView.setRegion(region, animated: true)
+
+        // update view
+        updateViewIfMapMovedSignificantly(forVisibleRegion: region)
+
+        // show results by location action
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) { [weak self] in
+            self?.redoSearch("Update Results")
+        }
+    }
+
     fileprivate func searchForFirstSearchSuggestion() {
         if !searchSuggestionController.searches[PlaceSearchSuggestionController.completionSection].isEmpty {
             currentSearch = searchSuggestionController.searches[PlaceSearchSuggestionController.completionSection][0]

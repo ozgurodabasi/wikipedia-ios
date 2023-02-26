@@ -1203,6 +1203,7 @@ NSString *const WMFLanguageVariantAlertsLibraryVersion = @"WMFLanguageVariantAle
             if (locationInfo) {
                 // For "View on a map" action to succeed, view mode has to be set to map.
                 [[self placesViewController] updateViewModeToMap];
+                [[self placesViewController] showLocation:locationInfo];
             }
         } break;
 
