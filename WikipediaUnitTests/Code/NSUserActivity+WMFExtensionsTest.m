@@ -53,9 +53,9 @@
 }
 
 - (void)testPlaceLocationURL {
-    NSURL *url = [NSURL URLWithString:@"wikipedia://Places"];
+    NSURL *url = [NSURL URLWithString:@"wikipedia://places"];
     NSUserActivity *activity = [NSUserActivity wmf_activityForWikipediaScheme:url];
-    XCTAssertEqual(activity.wmf_type, WMFUserActivityTypeLink);
+    XCTAssertEqual(activity.wmf_type, WMFUserActivityTypePlaces);
 }
 
 @end
