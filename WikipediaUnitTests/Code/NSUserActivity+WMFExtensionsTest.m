@@ -52,5 +52,11 @@
                           @"https://en.wikipedia.org/w/index.php?search=dog&title=Special:Search&fulltext=1");
 }
 
+- (void)testPlaceLocationURL {
+    NSURL *url = [NSURL URLWithString:@"wikipedia://Places"];
+    NSUserActivity *activity = [NSUserActivity wmf_activityForWikipediaScheme:url];
+    XCTAssertEqual(activity.wmf_type, WMFUserActivityTypeLink);
+}
+
 @end
 
