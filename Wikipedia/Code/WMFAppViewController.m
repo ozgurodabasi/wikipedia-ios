@@ -1147,6 +1147,8 @@ NSString *const WMFLanguageVariantAlertsLibraryVersion = @"WMFLanguageVariantAle
             return [activity wmf_searchTerm] != nil;
         case WMFUserActivityTypeLink:
             return [activity wmf_linkURL] != nil;
+        case WMFUserActivityTypePlacesWithLocation:
+            return [activity wmf_locationInfo] != nil;
         default:
             return NO;
     }
