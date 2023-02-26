@@ -10,5 +10,6 @@ The URL scheme is `wikipedia://`. The following URLs are currently handled:
 | Explore            | wikipedia://explore                      |                                          |
 | History            | wikipedia://history                      |                                          |
 | Places             | wikipedia://places[?WMFArticleURL=]      |                                          |
+| Places with Location | wikipedia://places[?lat=&long=]        |                                          |
 | Saved pages        | wikipedia://saved                        |                                          |
 | Search             | wikipedia://[site]/w/index.php?search=[query] | wikipedia://en.wikipedia.org/w/index.php?search=dog |
